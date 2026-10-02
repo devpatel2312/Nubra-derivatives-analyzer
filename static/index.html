@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Derivatives Analyzer</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand">Derivatives<span>Analyzer</span> <em id="mockBadge" hidden>MOCK DATA</em></div>
+  <nav>
+    <button class="tab active" data-page="chain">Option Chain</button>
+    <button class="tab" data-page="greeks">Greeks Analysis</button>
+  </nav>
+</header>
+
+<section class="controls">
+  <div class="chips" id="assets"></div>
+  <label>Expiry <select id="expiry"></select></label>
+  <label>Depth <select id="depth"></select></label>
+  <div class="seg" id="mode">
+    <button class="active" data-mode="live">Live</button>
+    <button data-mode="hist">Historical</button>
+  </div>
+  <span id="histControls" hidden>
+    <label>Date <input type="date" id="day"></label>
+    <label>Interval <select id="interval"><option>1m</option><option selected>5m</option><option>15m</option><option>30m</option></select></label>
+    <label>Time <input type="time" id="histTime" value="15:30" step="60"></label>
+    <button id="load" class="primary">Load</button>
+    <span class="jumps" aria-label="Move historical time forward">
+      <button data-jump="1">+1m</button><button data-jump="3">+3m</button>
+      <button data-jump="5">+5m</button><button data-jump="10">+10m</button>
+    </span>
+  </span>
+  <span id="status" class="status"></span>
+</section>
+
+<div id="error" class="error" hidden></div>
+
+<main>
+  <section id="page-chain">
+    <div class="summary" id="chainSummary"></div>
+    <div class="scroll"><table id="chainTable"></table></div>
+  </section>
+
+  <section id="page-greeks" hidden>
+    <div class="summary" id="greekSummary"></div>
+    <div class="tables">
+      <div><h3>1 · Opening <small id="t1sub"></small></h3><table id="t1" class="g"></table></div>
+      <div><h3>2 · <span id="t2title">Current</span> <small id="t2sub"></small></h3><table id="t2" class="g"></table></div>
+      <div><h3>3 · Change (<span id="changeFormula">2 − 1</span>)</h3><table id="t3" class="g"></table></div>
+    </div>
+    <p class="note" id="baselineNote"></p>
+    <div class="chartbar">
+      <b>Change from open</b>
+      <label>Calculation <select id="changeDirection"><option value="current-opening">Selected − Opening (2 − 1)</option><option value="opening-current">Opening − Selected (1 − 2)</option></select></label>
+      <div class="seg" id="metric">
+        <button data-m="vega" class="active">Vega</button><button data-m="theta">Theta</button><button data-m="delta">Delta</button>
+      </div>
+    </div>
+    <div class="chartbox"><canvas id="chart"></canvas></div>
+    <p class="note">Each side sums ATM → OTM strikes: CE = ATM and the strikes above it, PE = ATM and the strikes below it.
+      Greeks are per-contract values as returned by Nubra (PE delta and long-option theta are negative).</p>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
