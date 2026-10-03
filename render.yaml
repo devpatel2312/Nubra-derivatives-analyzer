@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: derivatives-analyzer
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: HOST=0.0.0.0 PORT=$PORT python run.py
+    healthCheckPath: /api/assets
+    envVars:
+      - key: USE_MOCK
+        value: "1"
+      - key: NUBRA_ENV
+        value: PROD

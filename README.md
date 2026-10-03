@@ -18,6 +18,26 @@ python run.py            # then open http://127.0.0.1:8000
 * `NUBRA_ENV=UAT` for sandbox. `ref_id`s differ between UAT and PROD, so don't mix them.
 * Tests: `pytest -q` (greeks maths + API in mock mode).
 
+## Deploy to Render
+
+This repo includes a `render.yaml` ready for a Render Web Service.
+
+1. Push this repo to GitHub.
+2. In Render, click New > Web Service and connect the GitHub repo.
+3. Keep the default settings, or use the included `render.yaml`.
+4. Add environment variables in Render (Important):
+   - `PHONE_NO` and `MPIN` for live Nubra auth
+   - `NUBRA_ENV=PROD` or `UAT`
+   - `USE_MOCK=0` for live mode; `USE_MOCK=1` for mock mode without credentials
+   - `HOST=0.0.0.0` (already handled by the startup command)
+5. Render will run:
+
+```bash
+HOST=0.0.0.0 PORT=$PORT python run.py
+```
+
+If you want a quick public demo without login, keep `USE_MOCK=1` in Render and the app will still work with synthetic data.
+
 ## Pages
 
 **Option Chain** - CE | Strike | PE with OI (bars), OI change, volume, IV, delta, theta, vega, LTP.
